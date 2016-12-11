@@ -20,6 +20,7 @@ namespace OOblagajna
         {
             MainController control = new MainController();
             ArtiklRepository.dohvatiSveArtikle();
+            RacuniRepository.dohvatiSveRacune();
             control.start();
             string input;
             while (true)
@@ -34,7 +35,7 @@ namespace OOblagajna
                         control.dodajArtikl();
                         break;
                     case "3":
-
+                        control.dodajRacun();
                         break;
                     case "4":
 

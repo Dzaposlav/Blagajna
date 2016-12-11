@@ -68,16 +68,19 @@ namespace OOblagajna.Controllers
         {
             consolePrintCenter("SVI ARTIKLI");
             List<string> ispis = new List<string>();
+            string mjera;
             foreach(Artikl artikl in ArtiklRepository.getArtikle())
             {
-                ispis.Add(artikl.Id + " - " + artikl.naziv + "(pdv "+ artikl.stopaPDV + "%)");
+                if (artikl.jedinicaMjere == mjernaJed.poKomadu) mjera = "komad";
+                else mjera = "kilogram";
+                ispis.Add(artikl.Id + " - " + artikl.naziv + "(pdv: "+ artikl.stopaPDV + "%," + mjera + ")");
             }
             printList(ispis);
-            opcije();
         }
 
         public void opcije()
         {
+            consolePrintCenter("OPCIJE");
             List<string> glavneOpcije = new List<string>();
             glavneOpcije.Add("1 - ispis artikala");
             glavneOpcije.Add("2 - unos novog artikla");
@@ -104,7 +107,65 @@ namespace OOblagajna.Controllers
             int id = ArtiklRepository.getNextId();
             Artikl noviArtikl = new Artikl(id, name, cijena, pdv, mjr);
             ArtiklRepository.dodajArtikl(noviArtikl);
+            Console.WriteLine("");
             opcije();
         }
+
+        // RACUNI ----------------------------------------------------------------------------
+
+        public void dodajRacun()
+        {
+            int id = RacuniRepository.getNextId();
+            DateTime datum = DateTime.Now;
+            Racun noviRacun = new Racun(id, datum);
+            RacuniRepository.dodajRacun(noviRacun);
+            upisStavaka(noviRacun);
+            RacuniRepository.spremiRacune();
+            ispisiStavke(noviRacun);
+            consolePrintCenterLeft("UKUPNA CIJENA:");
+            Console.WriteLine(noviRacun.ukupanIznos);
+            consolePrintCenterLeft("UKUPNI PDV");
+            Console.WriteLine(noviRacun.ukupniPDV);
+        }
+
+        public void upisStavaka(Racun racun)
+        {
+            consolePrintCenter("UPISITE ARTIKLE U RACUN");
+            ispisArtikli();
+            consolePrintCenter("Za kraj upisite 'q'");
+            string input;
+            int komadi;
+            float kilogrami;
+            while (true)
+            {
+                consolePrintCenterLeft("Artikl ID:");
+                input = Console.ReadLine();
+                if (input == "q") break;
+                int id = int.Parse(input);
+                consolePrintCenterLeft("Kolicina:");
+                input = Console.ReadLine();
+                if (input == "q") break;
+                if (ArtiklRepository.getArtiklById(id).jedinicaMjere == mjernaJed.poKomadu)
+                {
+                    komadi = int.Parse(input);
+                    racun.addArtikl(id, komadi);
+                }
+                else
+                {
+                    kilogrami = float.Parse(input);
+                    racun.addArtikl(id, kilogrami);
+                }
+            }
+        }
+
+        public void ispisiStavke(Racun racun)
+        {
+            foreach(string stavka in racun.getStavkeList())
+            {
+                consolePrintCenter(stavka);
+            }
+        }
+
+        
     }
 }

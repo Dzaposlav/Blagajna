@@ -30,6 +30,12 @@ namespace OOblagajna.Repositories
             spremiArtikle();
         }
 
+        public static Artikl getArtiklById(int id)
+        {
+            Artikl artikl = _artikli.Where(art => art.Id == id).Single();
+            return artikl;
+        }
+
         public static List<Artikl> getArtikle()
         {
             return _artikli;
