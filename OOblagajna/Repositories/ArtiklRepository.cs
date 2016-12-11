@@ -30,6 +30,10 @@ namespace OOblagajna.Repositories
             spremiArtikle();
         }
 
+        public static List<Artikl> getArtikle()
+        {
+            return _artikli;
+        }
 
         public static void dohvatiSveArtikle()
         {

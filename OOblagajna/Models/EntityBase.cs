@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace OOblagajna.Models
 {
+    [Serializable]
     public abstract class EntityBase<TId> : IEquatable<EntityBase<TId>>
     {
         protected EntityBase(TId id)

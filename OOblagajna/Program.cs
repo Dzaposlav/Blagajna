@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using OOblagajna.Controllers;
+using OOblagajna.Repositories;
 
 namespace OOblagajna
 {
@@ -17,8 +18,37 @@ namespace OOblagajna
     {
         static void Main(string[] args)
         {
-            MainController test = new MainController();
-            test.start();
+            MainController control = new MainController();
+            ArtiklRepository.dohvatiSveArtikle();
+            control.start();
+            string input;
+            while (true)
+            {
+                input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1":
+                        control.ispisArtikli();
+                        break;
+                    case "2":
+                        control.dodajArtikl();
+                        break;
+                    case "3":
+
+                        break;
+                    case "4":
+
+                        break;
+                    case "5":
+
+                        break;
+                    case "6":
+
+                        break;
+
+                }
+
+            }
         }
 
 
